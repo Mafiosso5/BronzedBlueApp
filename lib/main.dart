@@ -8,8 +8,8 @@ void main() {
 
 //Register function fopr POST request to API
 Future<http.Response> registerUser(
-    String uname, String email, String password, String mobile) {
-  return http.post(
+    String uname, String email, String password, String mobile) async {
+  final response = await http.post(
     Uri.parse('http://52.206.48.46/api/register '),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -21,11 +21,17 @@ Future<http.Response> registerUser(
       'mobileNumber': mobile
     }),
   );
+
+  if (response.statusCode == 201) {
+    return jsonDecode(response.body);
+  } else {
+    throw Exception("Failed to register");
+  }
 }
 
 //Login function fopr POST request to API
-Future<http.Response> login(String email, String password) {
-  return http.post(
+Future<http.Response> login(String email, String password) async {
+  final response = await http.post(
     Uri.parse('http://52.206.48.46/api/login '),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -35,6 +41,12 @@ Future<http.Response> login(String email, String password) {
       'password': password,
     }),
   );
+
+  if (response.statusCode == 201) {
+    return jsonDecode(response.body);
+  } else {
+    throw Exception("Failed to Login");
+  }
 }
 
 class MyApp extends StatelessWidget {
